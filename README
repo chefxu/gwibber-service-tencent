@@ -1,0 +1,14 @@
+这是我给自己写的一个微博插件，考虑到也许还有人需要，所以我就放到github里了。因为测试条件有限，只在ubuntu11.04下测试。如果发现有什么问题请联系我。
+
+I write this plugin just for fun. It helps me keep update to the world :)
+I only test it on my ubuntu 11.04, please feel free to contact me if you have any question.
+
+依赖（depends）:
+gwibber-service (>> 2.33.0), python-central (>= 0.6.11)
+
+常见问题:
+1 安装后没有生效？
+  gwibber需要重启才能生效，
+  停止gwibber-service: pkill -9  gwibber-service
+  再重新启动gwibber
+
