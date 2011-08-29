@@ -8,7 +8,7 @@ Depends: gwibber-service (>> 2.33.0), python-central (>= 0.6.11)
 Conflicts: gwibber-service (<= 2.33.0)
 Section: misc
 Priority: optional
-Homepage: https://launchpad.net/gwibber
+Homepage: http://t.qq.com/rssidea
 Description: Tencent plugin for Gwibber
  Gwibber is a social networking client for GNOME. It supports Facebook,
  Twitter, Identi.ca, StatusNet, FriendFeed, Qaiku, Flickr, and Digg.
