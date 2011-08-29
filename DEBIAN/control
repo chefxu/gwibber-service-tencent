@@ -1,0 +1,17 @@
+Package: gwibber-service-tencent
+Source: gwibber
+Version: 0.1a
+Architecture: all
+Maintainer: Chef Xu <rssidea@qq.com>
+Installed-Size: 216
+Depends: gwibber-service (>> 2.33.0), python-central (>= 0.6.11)
+Conflicts: gwibber-service (<= 2.33.0)
+Section: misc
+Priority: optional
+Homepage: https://launchpad.net/gwibber
+Description: Tencent plugin for Gwibber
+ Gwibber is a social networking client for GNOME. It supports Facebook,
+ Twitter, Identi.ca, StatusNet, FriendFeed, Qaiku, Flickr, and Digg.
+ .
+ This package includes the Tencent plugin for the Gwibber desktop service，and I write it just for fun.
+
