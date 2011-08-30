@@ -132,7 +132,7 @@ class Client:
         "id": user["id"],
         "location": user.get("location",''),
         "followers": None,
-        "image": "/".join((user.get("head", ""), '100')),
+        "image": user.get("head", '') and user.get("head") + '/100',
         "url": "/".join((URL_PREFIX, user.get("name", 'me'))),
         "is_me": user.get("name", 'me') == self.account["username"],
     }
@@ -167,10 +167,12 @@ class Client:
       m["private"] = True
 
       m["recipient"] = {}
-      m["recipient"]["name"] = data["name"]
-      m["recipient"]["nick"] = data["nick"]
+      m["recipient"]["name"] = data.get("toname", '')
+      m["recipient"]["nick"] = data.get("tonick", '')
       m["recipient"]["id"] = data["id"]
-      m["recipient"]["image"] = data["head"] + '/100'
+      m["recipient"]["image"] = data.get("tohead", '')
+      if m["recipient"]['image']:
+        m['recipient']['image'] += '/100'
       m["recipient"]["location"] = data["location"]
       m["recipient"]["url"] = "/".join((URL_PREFIX, m["recipient"]["nick"]))
       m["recipient"]["is_me"] = m["recipient"]["nick"] == self.account["username"]
@@ -178,6 +180,7 @@ class Client:
 
       return m
     except Exception as e:
+      print e
       log.logger.error("%s private failure - %s", PROTOCOL_INFO["name"], data)
       return {}
 
@@ -325,8 +328,8 @@ class Client:
         id=res[0]['mid'])
 
   def send_private(self, message, private):
-    self._get("direct_messages/new.json", "private", post=True, single=True,
-        content=message, name=private["sender"]["name"])
+    self._get("private/add", "private", post=True, single=True,
+        content=message, name=private["sender"]["nick"])
     return None
 
   def send_thread(self, message, target):
