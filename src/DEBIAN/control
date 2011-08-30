@@ -1,6 +1,6 @@
 Package: gwibber-service-tencent
 Source: gwibber
-Version: 0.1.1b
+Version: 0.1.2b
 Architecture: all
 Maintainer: Chef Xu <rssidea@qq.com>
 Installed-Size: 216

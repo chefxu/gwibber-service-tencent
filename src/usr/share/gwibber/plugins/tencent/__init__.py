@@ -89,7 +89,7 @@ class Client:
         if data.has_key('source') :
           source = data['source']
           if source and source.has_key("text"):
-            m['text'] = m['text'] + '<span class="text" style="padding:5px;margin:5px;border-top:1px solid #ddd;">' + source['nick'] + ':' + source['text'] + '"</span>'
+            m['text'] = m['text'] + '<span class="text" style="padding:5px;margin:5px;border-top:1px solid #ddd;display:inline-block;">' + source['nick'] + ':' + source['text'] + '"</span>'
       else:
         m["text"] = data["text"] = "message has been sent!"
       m["to_me"] = ("@%s" % self.account["username"]) in data["text"]
@@ -180,7 +180,6 @@ class Client:
 
       return m
     except Exception as e:
-      print e
       log.logger.error("%s private failure - %s", PROTOCOL_INFO["name"], data)
       return {}
 
