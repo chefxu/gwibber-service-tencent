@@ -30,11 +30,11 @@ PROTOCOL_INFO = {
     #"search",
     #"tag",
     "reply",
-    #"responses",
+    "responses",
     "private",
     "public",
     "delete",
-    "retweet",
+    #"retweet",
     #"like",
     "send_thread",
     "send_private",
@@ -47,7 +47,7 @@ PROTOCOL_INFO = {
   "default_streams": [
     "receive",
     "images",
-    #"responses",
+    "responses",
     "private",
     #"lists",
   ],
@@ -86,6 +86,10 @@ class Client:
         m["time"] = data["timestamp"]
       if data.has_key("text"):
         m["text"] = unescape(data["text"])
+        if data.has_key('source') :
+          source = data['source']
+          if source and source.has_key("text"):
+            m['text'] = m['text'] + '<span class="text" style="padding:5px;margin:5px;border-top:1px solid #ddd;">' + source['nick'] + ':' + source['text'] + '"</span>'
       else:
         m["text"] = data["text"] = "message has been sent!"
       m["to_me"] = ("@%s" % self.account["username"]) in data["text"]
@@ -109,6 +113,9 @@ class Client:
         images = []
         for img in data['image']:
           images.append({"src": img + "/460", "url": img + "/2000"})
+          if data.has_key("source") and data['source'] and data['source']['image']:
+            for img in data['source']['image']:
+              images.append({"src": img + "/460", "url": img + "/2000"})
         if images:
           m["images"] = images
           m["type"] = "photo"
@@ -120,14 +127,14 @@ class Client:
 
   def _user(self, user):
     return {
-        "name": user["nick"],
-        "nick": user["name"],
+        "name": user.get("nick", 'me'),
+        "nick": user.get("name",'me'),
         "id": user["id"],
-        "location": user["location"],
+        "location": user.get("location",''),
         "followers": None,
-        "image": "/".join((user["head"], '100')),
-        "url": "/".join((URL_PREFIX, user["name"])),
-        "is_me": user["name"] == self.account["username"],
+        "image": "/".join((user.get("head", ""), '100')),
+        "url": "/".join((URL_PREFIX, user.get("name", 'me'))),
+        "is_me": user.get("name", 'me') == self.account["username"],
     }
 
   def _message(self, data):
@@ -135,7 +142,10 @@ class Client:
       return []
 
     m = self._common(data)
-    m["source"] = data['from']
+    if data.has_key('from'):
+      m["source"] = data['from']
+    else:
+      m['source'] = 'Gwibber'
 
     #if data.has_key("in_reply_to_status_id"):
       #if data["in_reply_to_status_id"]:
@@ -157,17 +167,17 @@ class Client:
       m["private"] = True
 
       m["recipient"] = {}
-      m["recipient"]["name"] = data["recipient"]["name"]
-      m["recipient"]["nick"] = data["recipient"]["screen_name"]
-      m["recipient"]["id"] = data["recipient"]["id"]
-      m["recipient"]["image"] = data["recipient"]["profile_image_url"]
-      m["recipient"]["location"] = data["recipient"]["location"]
+      m["recipient"]["name"] = data["name"]
+      m["recipient"]["nick"] = data["nick"]
+      m["recipient"]["id"] = data["id"]
+      m["recipient"]["image"] = data["head"] + '/100'
+      m["recipient"]["location"] = data["location"]
       m["recipient"]["url"] = "/".join((URL_PREFIX, m["recipient"]["nick"]))
       m["recipient"]["is_me"] = m["recipient"]["nick"] == self.account["username"]
       m["to_me"] = m["recipient"]["is_me"]
 
       return m
-    except:
+    except Exception as e:
       log.logger.error("%s private failure - %s", PROTOCOL_INFO["name"], data)
       return {}
 
@@ -270,16 +280,17 @@ class Client:
     return getattr(self, opname)(**args)
 
   def receive(self, count=util.COUNT, since=None):
-    return self._get("statuses/home_timeline", count=count, since_id=since)
+    home = self._get("statuses/home_timeline", count=count, since_id=since, type=0)
+    mine = self._get("statuses/broadcast_timeline", count=count, since_id=since, type=0)
+    return home + mine
 
   def user_messages(self, id=None, count=util.COUNT, since=None):
     return self._get("statuses/user_timeline", id=id, count=count, since_id=since)
 
   def responses(self, count=util.COUNT, since=None):
-    return self._get("statuses/mentions", count=count, since_id=since)
+    return self._get("statuses/mentions_timeline", count=count, since_id=since)
 
   def private(self, count=util.COUNT, since=None):
-    return None #no permission
     private = self._get("private/recv", "private", count=count, since_id=since) or []
     private_sent = self._get("private/send", "private", count=count, since_id=since) or []
     return private + private_sent
@@ -308,9 +319,10 @@ class Client:
     return self._get("favorites/create/%s.json" % message["mid"], None, post=True, do=1)
 
   def send(self, message):
-    self._get("t/add", post=True, single=True,
+    res = self._get("t/add", post=True, single=True,
         content=message)
-    return None
+    return self._get('t/show', post=True, single = True,
+        id=res[0]['mid'])
 
   def send_private(self, message, private):
     self._get("direct_messages/new.json", "private", post=True, single=True,
@@ -318,6 +330,11 @@ class Client:
     return None
 
   def send_thread(self, message, target):
-    self._get("t/re_add", post=True, single=True,
+    isreply = (message[0] == '@')
+    path = 't/re_add'
+    if isreply:
+      path = 't/comment'
+    res = self._get(path, post=True, single=True,
         content=message, reid=target["mid"])
-    return None
+    return self._get('t/show', post=True, single = True,
+        id=res[0]['mid'])

@@ -152,8 +152,6 @@ class AccountWidget(gtk.VBox):
     elif self.dialog.ui and not saved:
       self.dialog.ui.get_object("vbox_create").show()
 
-    print str(data)
-
   def on_tencent_auth_title_change(self, web=None, title=None, data=None):
     saved = False
     print title.get_title()
@@ -189,8 +187,6 @@ class AccountWidget(gtk.VBox):
       tokendata = urllib2.urlopen(request.http_url, request.to_postdata()).read()
       data = urlparse.parse_qs(tokendata)
 
-      print str(data)
-      return
       atok = oauth.OAuthToken.from_string(tokendata)
 
       self.account["access_token"] = data["oauth_token"][0]
