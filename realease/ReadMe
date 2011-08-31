@@ -1,0 +1,7 @@
+deb包移到对应的分支上去了，请到相关分支去下载deb包
+
+版本<<gwibber3.1 (ubuntu 10.04, ubuntu 10.10, ubuntu11.04)
+对应分支 gwibber3.0
+
+版本>=gwibber3.1 (ubuntu 11.10)
+对应分支 gwibber3.1
