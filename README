@@ -12,4 +12,4 @@ gwibber-service (>> 2.33.0), python-central (>= 0.6.11)
   停止gwibber-service: pkill -9  gwibber-service
   再重新启动gwibber
 2 如何评论和转播？
-  回复微博的时候，文本框会出现类似“@rssidea”的字串，这种情况下发送微博为发送评论，如果手动删掉这个字串再发送你要说的话，则为转播
+  回复微博的时候，文本框会出现类似“@rssidea”的字串，这种情况下发送微博为发送评论，如果手动删掉这个字串再发送你要说的话，则为转播.
