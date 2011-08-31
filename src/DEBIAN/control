@@ -5,7 +5,8 @@ Architecture: all
 Maintainer: Chef Xu <rssidea@qq.com>
 Installed-Size: 216
 Depends: gwibber-service (>> 2.33.0), python-central (>= 0.6.11)
-Conflicts: gwibber-service (<= 2.33.0)
+Conflicts: gwibber-service (<= 2.33.0), gwibber-service (>= 3.1.0)
+
 Section: misc
 Priority: optional
 Homepage: http://t.qq.com/rssidea
