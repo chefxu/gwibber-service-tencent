@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rm -r /usr/share/gwibber/plugins/tencent/
+rm -r /usr/share/pyshared-data/gwibber-service-tencent
+rmdir /usr/share/pyshared-data/ 2>/dev/null
+
+echo "Done." 

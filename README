@@ -1,3 +1,14 @@
+我写了两个脚本帮助你安装。
+I just wrote two scripts help you to install it.
+
+安装 Install: sudo ./setup
+卸载 Uninstall: sudo ./uninstall
+
+该脚本在 Fedora 16 下测试通过。
+注意：该脚本的内容可能对于您的发行版不适用，如果你遇到了这种情况，请给我发email：crtmike@gmail.com
+请在电子邮件内容中包括正确的安装路径。感激不尽！
+
+=========== Original README =================
 这是我给自己写的一个微博插件，考虑到也许还有人需要，所以我就放到github里了。因为测试条件有限，只在ubuntu11.04下测试。如果发现有什么问题请联系我。
 
 I write this plugin just for fun. It helps me keep update to the world :)
